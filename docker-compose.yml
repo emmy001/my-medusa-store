@@ -32,7 +32,7 @@ services:
 
   # Medusa Server
   medusa:
-    build: .
+    image: ghcr.io/emmy001/my-medusa-store:latest
     container_name: medusa_backend
     restart: unless-stopped
     depends_on:
