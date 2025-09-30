@@ -1,43 +1,21 @@
-# Your existing Dockerfile with these additions:
-
-# Build stage
-FROM node:18-alpine AS builder
+# Development Dockerfile for Medusa
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY yarn.lock ./
-
 # Install dependencies
-RUN yarn install
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --network-timeout 600000
 
 # Copy source code
 COPY . .
 
-# Build the admin UI
+# Build all TS -> JS (backend + plugins)
 RUN yarn build
-
-# Production stage
-FROM node:18-alpine
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-COPY yarn.lock ./
-
-# Install production dependencies only
-RUN yarn install --production
-
-# Copy built files from builder stage
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-
-# Copy other necessary files
-COPY . .
 
 EXPOSE 9000
 
-CMD ["yarn", "start"]
+# Entrypoint will run migrations before starting server
+#CMD ["sh", "-c", "yarn medusa migrations run && ./start.sh"]
+CMD ["sh", "-c", "yarn medusa db:migrate && ./start.sh"]
+
