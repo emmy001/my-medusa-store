@@ -50,16 +50,6 @@ services:
       - ADMIN_DISABLED=true
     env_file:
       - .env
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: >
-      sh -c "
-        echo '⏳ Running DB migrations...' &&
-        npx medusa db:migrate &&
-        echo '✅ Starting Medusa server...' &&
-        yarn start
-      "
     networks:
       - medusa_network
 
