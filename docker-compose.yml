@@ -43,7 +43,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/medusa-store
       - REDIS_URL=redis://redis:6379
     env_file:
@@ -51,6 +51,13 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    command: >
+      sh -c "
+        echo '⏳ Running migrations...' &&
+        npx medusa migrations run &&
+        echo '✅ Starting Medusa server...' &&
+        yarn start
+      "
     networks:
       - medusa_network
 
