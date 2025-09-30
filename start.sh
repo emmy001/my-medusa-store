@@ -10,5 +10,5 @@ echo "Seeding database..."
 npm run seed || echo "Seeding failed, continuing..."
 
 echo "Starting Medusa production server..."
-yarn start --skip-build
+yarn medusa start
 
