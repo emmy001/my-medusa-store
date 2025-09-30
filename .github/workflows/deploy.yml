@@ -51,4 +51,4 @@ jobs:
             docker compose up -d
 
             # Clean old images
-            # docker system prune -af
+            # use later docker system prune -af
