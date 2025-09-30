@@ -53,8 +53,8 @@ services:
       - /app/node_modules
     command: >
       sh -c "
-        echo '⏳ Running migrations...' &&
-        npx medusa migrations run &&
+        echo '⏳ Running DB migrations...' &&
+        npx medusa db:migrate &&
         echo '✅ Starting Medusa server...' &&
         yarn start
       "
