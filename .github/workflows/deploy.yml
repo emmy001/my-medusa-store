@@ -46,9 +46,25 @@ jobs:
             # Log in to GHCR
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Pull updated image
+      - name: Create .env file on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /srv/my-medusa-store
+            echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Run docker compose on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /srv/my-medusa-store
             docker compose pull
             docker compose up -d
-
-            # Clean old images
-            # use later docker system prune -af
+            # Clean old images (optional, enable later)
+            # docker system prune -af
