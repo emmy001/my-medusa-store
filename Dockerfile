@@ -7,11 +7,11 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --network-timeout 600000
 
-COPY start.sh ./start.sh
-RUN chmod +x ./start.sh
-
 # Copy source code
 COPY . .
+
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
 
 # Build all TS -> JS (backend + plugins)
 RUN yarn build
